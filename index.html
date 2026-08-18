@@ -296,9 +296,8 @@
   </footer>
 
   <script>
-    // Make sure to populate these variables with your Supabase credentials
-    const SUPABASE_URL = "YOUR_SUPABASE_URL";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const SUPABASE_URL = "https://grmgrvlcgdjgeqnwwvos.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_6Wy84w4Gw6kRw7UvDIo1Rg_nXJmp73f";
 
     function escapeHTML(value) {
       return String(value ?? "")
@@ -353,11 +352,6 @@
       const container = document.getElementById("products-container");
 
       try {
-        if (!SUPABASE_URL || SUPABASE_URL.includes("YOUR_SUPABASE_URL")) {
-          throw new Error("Missing valid SUPABASE_URL and SUPABASE_ANON_KEY.");
-        }
-
-        // Fetch products without nested relations to avoid PostgREST 404 errors
         const prodRes = await fetch(
           `${SUPABASE_URL}/rest/v1/products?select=id,name,price,product_url,destination_url&order=created_at.desc`,
           {
@@ -379,7 +373,6 @@
           return;
         }
 
-        // Fetch image mappings in a separate clean call
         const imgRes = await fetch(
           `${SUPABASE_URL}/rest/v1/product_images?select=product_id,image_url`,
           {
@@ -392,7 +385,6 @@
 
         const images = imgRes.ok ? await imgRes.json() : [];
 
-        // Map product IDs to image URLs
         const imageMap = {};
         images.forEach(img => {
           if (!imageMap[img.product_id]) {
@@ -400,7 +392,6 @@
           }
         });
 
-        // Render cards
         container.innerHTML = products
           .map(p => createProductCard(p, imageMap[p.id]))
           .join("");
