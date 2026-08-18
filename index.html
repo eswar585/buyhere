@@ -1,289 +1,381 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuyHere - Discover Something Better</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-  <title>BuyHere — Discover Products</title>
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
 
-  <meta
-    name="description"
-    content="Discover useful products, compare prices, and find the right product for you."
-  >
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+      text-decoration: none;
+    }
 
-  <link
-    rel="stylesheet"
-    href="css/style.css"
-  >
+    .nav-search input {
+      padding: 8px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      width: 260px;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      margin-left: 16px;
+      text-decoration: none;
+      color: #475569;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: #2563eb;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 48px 20px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .hero-subtitle {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #2563eb;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: #0f172a;
+    }
+
+    .hero-search {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .hero-search input {
+      flex: 1;
+      padding: 10px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .hero-search button {
+      padding: 10px 20px;
+      background-color: #0f172a;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Main Section */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+
+    .collection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 24px;
+    }
+
+    .collection-header span {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.5px;
+    }
+
+    .collection-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .explore-link {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* Grid & Cards (Flexbox Layout) */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .product-card-image img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .product-card-body {
+      margin-top: 12px;
+    }
+
+    .product-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .product-card-price {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* Pushes checkout button to absolute bottom */
+    .product-card-action {
+      margin-top: auto;
+      padding-top: 16px;
+    }
+
+    .checkout-button {
+      display: block;
+      width: 100%;
+      padding: 10px 0;
+      background-color: #2563eb;
+      color: #ffffff;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+
+    .checkout-button:hover {
+      background-color: #1d4ed8;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 48px;
+    }
+
+    .footer-brand p {
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .footer-links a {
+      margin-left: 16px;
+      color: #475569;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
-
-
 <body>
 
-  <!-- =========================================
-       HEADER
-  ========================================== -->
-
-  <header class="site-header">
-
-    <div class="container header-inner">
-
-      <!-- LOGO -->
-
-      <a
-        href="index.html"
-        class="site-logo"
-      >
-        BuyHere
-      </a>
-
-
-      <!-- SEARCH -->
-
-      <form
-        class="search-form"
-        action="search.html"
-        method="GET"
-      >
-
-        <input
-          type="search"
-          name="q"
-          id="home-search-input"
-          placeholder="Search products..."
-          autocomplete="off"
-          aria-label="Search products"
-        >
-
-        <button
-          type="submit"
-          aria-label="Search"
-        >
-          Search
-        </button>
-
-      </form>
-
-
-      <!-- HOME -->
-
-      <a
-        href="index.html"
-        class="header-home-link"
-      >
-        Home
-      </a>
-
+  <!-- Navbar -->
+  <header class="navbar">
+    <a href="#" class="brand">BuyHere</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search products...">
     </div>
-
+    <nav class="nav-links">
+      <a href="#">Home</a>
+    </nav>
   </header>
 
+  <!-- Hero Section -->
+  <section class="hero">
+    <p class="hero-subtitle">Discover Something Better</p>
+    <h1 class="hero-title">Find products worth buying.</h1>
+    <div class="hero-search">
+      <input type="text" placeholder="What are you looking for?">
+      <button type="button">Search</button>
+    </div>
+  </section>
 
-
-  <!-- =========================================
-       HERO
-  ========================================== -->
-
+  <!-- Main Grid Section -->
   <main>
-
-    <section class="hero-section">
-
-      <div class="container hero-container">
-
-        <div class="hero-content">
-
-          <div class="hero-eyebrow">
-            DISCOVER SOMETHING BETTER
-          </div>
-
-
-          <h1>
-            Find products
-            <br>
-            worth buying.
-          </h1>
-
-
-          <p>
-            Explore a carefully selected collection
-            of products and find what fits you best.
-          </p>
-
-
-          <!-- HERO SEARCH -->
-
-          <form
-            class="hero-search-form"
-            action="search.html"
-            method="GET"
-          >
-
-            <input
-              type="search"
-              name="q"
-              placeholder="What are you looking for?"
-              autocomplete="off"
-              aria-label="Search products"
-            >
-
-            <button
-              type="submit"
-            >
-              Search
-            </button>
-
-          </form>
-
-        </div>
-
+    <div class="collection-header">
+      <div>
+        <span>COLLECTION</span>
+        <h2>Latest products</h2>
       </div>
+      <a href="#" class="explore-link">Explore all &rarr;</a>
+    </div>
 
-    </section>
-
-
-
-    <!-- =========================================
-         PRODUCTS
-    ========================================== -->
-
-    <section class="products-section">
-
-      <div class="container">
-
-        <div class="section-heading">
-
-          <div>
-
-            <div class="section-eyebrow">
-              COLLECTION
-            </div>
-
-            <h2>
-              Latest products
-            </h2>
-
-          </div>
-
-
-          <a
-            href="search.html"
-            class="section-link"
-          >
-            Explore all
-          </a>
-
-        </div>
-
-
-        <!-- PRODUCT GRID -->
-
-        <div
-          id="products-grid"
-          class="product-grid"
-        >
-
-          <!-- Products are loaded by home.js -->
-
-          <div class="product-loading">
-            Loading products...
-          </div>
-
-        </div>
-
-
-        <!-- EMPTY STATE -->
-
-        <div
-          id="products-empty"
-          class="products-empty"
-          hidden
-        >
-
-          <h3>
-            No products yet
-          </h3>
-
-          <p>
-            Products will appear here once they are added.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
+    <div id="products-container" class="products-grid">
+      <!-- Product cards will be dynamically rendered here -->
+    </div>
   </main>
 
-
-
-  <!-- =========================================
-       FOOTER
-  ========================================== -->
-
-  <footer class="site-footer">
-
-    <div class="container footer-inner">
-
-      <div class="footer-brand">
-
-        <a
-          href="index.html"
-          class="site-logo"
-        >
-          BuyHere
-        </a>
-
-        <p>
-          Discover products worth buying.
-        </p>
-
-      </div>
-
-
-      <div class="footer-links">
-
-        <a href="index.html">
-          Home
-        </a>
-
-        <a href="search.html">
-          Search
-        </a>
-
-        <a href="admin.html">
-          Admin
-        </a>
-
-      </div>
-
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">
+      <strong>BuyHere</strong>
+      <p>Discover products worth buying.</p>
     </div>
-
-
-    <div class="container footer-bottom">
-
-      <p>
-        © 2026 BuyHere. All rights reserved.
-      </p>
-
+    <div class="footer-links">
+      <a href="#">Home</a>
+      <a href="#">Search</a>
+      <a href="admin.html">Admin</a>
     </div>
-
   </footer>
 
+  <!-- Dynamic Product Loading Script -->
+  <script>
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-  <!-- =========================================
-       JAVASCRIPT
-  ========================================== -->
+    function formatPrice(price) {
+      return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0
+      }).format(price);
+    }
 
-  <script src="js/config.js"></script>
-  <script src="js/home.js"></script>
+    function createProductCard(product) {
+      const image =
+        product.product_images?.[0]?.image_url ||
+        "https://placehold.co/300x300/f5f5f5/777?text=Product";
 
+      const checkoutUrl =
+        product.product_url || product.destination_url || "#";
+
+      return `
+        <div class="product-card">
+          <div class="product-card-image">
+            <img src="${escapeHTML(image)}" alt="${escapeHTML(product.name)}">
+          </div>
+          
+          <div class="product-card-body">
+            <h3 class="product-card-title">${escapeHTML(product.name)}</h3>
+            <p class="product-card-price">${formatPrice(product.price)}</p>
+          </div>
+
+          <div class="product-card-action">
+            <a 
+              href="${escapeHTML(checkoutUrl)}" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="checkout-button"
+            >
+              Checkout
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadPublicProducts() {
+      const container = document.getElementById("products-container");
+      
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/products?select=id,name,price,slug,product_url,destination_url,product_images(image_url)&order=created_at.desc`,
+          {
+            headers: {
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+            }
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to load products");
+
+        const products = await response.json();
+
+        if (!products.length) {
+          container.innerHTML = "<p>No products available yet.</p>";
+          return;
+        }
+
+        container.innerHTML = products.map(createProductCard).join("");
+      } catch (error) {
+        console.error("Error loading products:", error);
+      }
+    }
+
+    loadPublicProducts();
+  </script>
 </body>
-
 </html>
