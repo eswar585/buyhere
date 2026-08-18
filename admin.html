@@ -3,352 +3,204 @@
 
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Admin — BuyHere</title>
-
-  <link
-    rel="stylesheet"
-    href="css/style.css"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — BuyHere</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .admin-card {
+      background: #ffffff;
+      padding: 32px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 40px;
+    }
+    .admin-card h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 62, 109, 0.1);
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--accent);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .btn-submit:hover {
+      background-color: var(--accent-hover);
+    }
+    .status-message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      display: none;
+    }
+    .status-success {
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .status-error {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    
+    /* Admin Product List Table */
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    .product-table th,
+    .product-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+    .product-table th {
+      background-color: #f1f5f9;
+      color: var(--primary);
+    }
+    .btn-delete {
+      padding: 6px 12px;
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-delete:hover {
+      background-color: #dc2626;
+    }
+  </style>
 </head>
 
-
-<body class="admin-page">
+<body>
 
   <!-- HEADER -->
-
   <header class="site-header">
-
     <div class="container header-inner">
-
-      <a
-        href="index.html"
-        class="site-logo"
-      >
-        BuyHere
+      <a href="index.html" class="brand">
+        <img src="images/logo.png" alt="BuyHere Logo" class="brand-logo-img">
       </a>
-
-
-      <button
-        id="logout-button"
-        class="admin-logout"
-        type="button"
-      >
-        Logout
-      </button>
-
+      <span style="font-weight: 700; color: var(--accent);">Admin Dashboard</span>
+      <a href="index.html" class="header-home-link">View Site</a>
     </div>
-
   </header>
 
+  <!-- MAIN ADMIN -->
+  <main class="container admin-container">
 
-  <!-- LOGIN -->
+    <!-- ADD PRODUCT FORM -->
+    <div class="admin-card">
+      <h2>Add New Product</h2>
+      
+      <form id="add-product-form">
+        <div class="form-grid">
 
-  <main>
+          <div class="form-group">
+            <label for="product-name">Product Name *</label>
+            <input type="text" id="product-name" placeholder="e.g. Wireless Headphones" required>
+          </div>
 
-    <section
-      id="login-section"
-      class="admin-login-section"
-    >
+          <div class="form-group">
+            <label for="product-price">Price (INR) *</label>
+            <input type="number" step="0.01" id="product-price" placeholder="e.g. 2999" required>
+          </div>
 
-      <div class="admin-login-card">
+          <div class="form-group full-width">
+            <label for="product-checkout">Checkout / Destination URL *</label>
+            <input type="url" id="product-checkout" placeholder="https://amazon.in/... or affiliate link" required>
+          </div>
 
-        <div class="admin-eyebrow">
-          ADMIN
+          <div class="form-group full-width">
+            <label for="product-image">Product Image File *</label>
+            <input type="file" id="product-image" accept="image/*" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="product-description">Description</label>
+            <textarea id="product-description" rows="4" placeholder="Brief details about the product..."></textarea>
+          </div>
+
         </div>
 
+        <button type="submit" id="submit-btn" class="btn-submit">Add Product</button>
+        <div id="status-msg" class="status-message"></div>
+      </form>
+    </div>
 
-        <h1>
-          Welcome back.
-        </h1>
-
-
-        <p>
-          Sign in to manage your products.
-        </p>
-
-
-        <form id="login-form">
-
-          <div class="admin-field">
-
-            <label for="email">
-              Email
-            </label>
-
-            <input
-              id="email"
-              type="email"
-              placeholder="Your email"
-              required
-              autocomplete="email"
-            >
-
-          </div>
-
-
-          <div class="admin-field">
-
-            <label for="password">
-              Password
-            </label>
-
-            <input
-              id="password"
-              type="password"
-              placeholder="Your password"
-              required
-              autocomplete="current-password"
-            >
-
-          </div>
-
-
-          <button
-            type="submit"
-            class="admin-primary-button"
-          >
-            Sign in
-          </button>
-
-
-          <div
-            id="login-message"
-            class="admin-message"
-          ></div>
-
-        </form>
-
+    <!-- EXISTING PRODUCTS TABLE -->
+    <div class="admin-card">
+      <h2>Existing Products</h2>
+      <div style="overflow-x: auto;">
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-product-list">
+            <tr>
+              <td colspan="3" style="text-align: center; color: var(--text-muted);">Loading catalog...</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-    </section>
-
-
-    <!-- DASHBOARD -->
-
-    <section
-      id="dashboard-section"
-      class="admin-dashboard"
-      hidden
-    >
-
-      <div class="container">
-
-        <div class="admin-dashboard-header">
-
-          <div>
-
-            <div class="admin-eyebrow">
-              DASHBOARD
-            </div>
-
-            <h1>
-              Products
-            </h1>
-
-            <p>
-              Add and manage your products.
-            </p>
-
-          </div>
-
-
-          <button
-            id="open-add-product"
-            class="admin-primary-button"
-            type="button"
-          >
-            + Add Product
-          </button>
-
-        </div>
-
-
-        <!-- ADD PRODUCT -->
-
-        <div
-          id="product-form-wrapper"
-          class="admin-form-card"
-          hidden
-        >
-
-          <div class="admin-form-header">
-
-            <div>
-
-              <div class="admin-eyebrow">
-                NEW PRODUCT
-              </div>
-
-              <h2>
-                Add a product
-              </h2>
-
-            </div>
-
-
-            <button
-              id="close-product-form"
-              class="admin-close-button"
-              type="button"
-            >
-              ×
-            </button>
-
-          </div>
-
-
-          <form id="product-form">
-
-            <div class="admin-field">
-
-              <label for="product-name">
-                Product name
-              </label>
-
-              <input
-                id="product-name"
-                type="text"
-                placeholder="Sony WH-1000XM5"
-                required
-              >
-
-            </div>
-
-
-            <div class="admin-field">
-
-              <label for="product-price">
-                Price
-              </label>
-
-              <input
-                id="product-price"
-                type="number"
-                min="0"
-                step="1"
-                placeholder="29990"
-                required
-              >
-
-            </div>
-
-
-            <div class="admin-field">
-
-              <label for="product-image">
-                Product image
-              </label>
-
-              <input
-                id="product-image"
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                required
-              >
-
-              <div
-                id="image-preview"
-                class="admin-image-preview"
-              ></div>
-
-            </div>
-
-
-            <div class="admin-field">
-
-              <label for="product-url">
-                Check out URL
-              </label>
-
-              <input
-                id="product-url"
-                type="url"
-                placeholder="https://..."
-                required
-              >
-
-            </div>
-
-
-            <div
-              id="product-message"
-              class="admin-message"
-            ></div>
-
-
-            <div class="admin-form-actions">
-
-              <button
-                type="button"
-                id="cancel-product"
-                class="admin-secondary-button"
-              >
-                Cancel
-              </button>
-
-
-              <button
-                type="submit"
-                class="admin-primary-button"
-              >
-                Add Product
-              </button>
-
-            </div>
-
-          </form>
-
-        </div>
-
-
-        <!-- PRODUCT LIST -->
-
-        <div class="admin-products-wrapper">
-
-          <div class="admin-section-heading">
-
-            <h2>
-              Your products
-            </h2>
-
-            <span
-              id="admin-product-count"
-            >
-              0 products
-            </span>
-
-          </div>
-
-
-          <div
-            id="admin-products"
-            class="admin-products-list"
-          >
-
-            <div class="admin-loading">
-              Loading products...
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
+    </div>
 
   </main>
 
-
   <script src="js/config.js"></script>
   <script src="js/admin.js"></script>
-
 </body>
 
 </html>
