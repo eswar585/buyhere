@@ -28,36 +28,65 @@ let currentCategory = "";
 
 
 /* =========================================
-   SUPABASE
+   READ URL PARAMETERS
 ========================================= */
 
-async function supabaseRequest(table, query = "") {
+const urlParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const urlCategory =
+  urlParams.get("category");
+
+const urlSearch =
+  urlParams.get("q");
+
+
+/* =========================================
+   SUPABASE REQUEST
+========================================= */
+
+async function supabaseRequest(
+  table,
+  query = ""
+) {
 
   const response = await fetch(
     `${SUPABASE_URL}/rest/v1/${table}${query}`,
     {
+      method: "GET",
+
       headers: {
         apikey: SUPABASE_ANON_KEY,
+
         Authorization:
-          `Bearer ${SUPABASE_ANON_KEY}`
+          `Bearer ${SUPABASE_ANON_KEY}`,
+
+        "Content-Type":
+          "application/json"
       }
     }
   );
+
 
   if (!response.ok) {
 
     const error =
       await response.text();
 
-    throw new Error(error);
+    throw new Error(
+      `Supabase error ${response.status}: ${error}`
+    );
   }
+
 
   return response.json();
 }
 
 
 /* =========================================
-   HTML ESCAPE
+   ESCAPE HTML
 ========================================= */
 
 function escapeHTML(value) {
@@ -79,10 +108,13 @@ function formatPrice(price) {
 
   if (
     price === null ||
-    price === undefined
+    price === undefined ||
+    price === ""
   ) {
+
     return "Price unavailable";
   }
+
 
   return new Intl.NumberFormat(
     "en-IN",
@@ -96,7 +128,7 @@ function formatPrice(price) {
 
 
 /* =========================================
-   IMAGE
+   PRODUCT IMAGE
 ========================================= */
 
 function getProductImage(product) {
@@ -109,14 +141,17 @@ function getProductImage(product) {
     const images =
       [...product.product_images];
 
+
     images.sort(
       (a, b) =>
         (a.sort_order || 0) -
         (b.sort_order || 0)
     );
 
+
     return images[0].image_url;
   }
+
 
   return "https://placehold.co/800x800/f4f5f6/777?text=Product";
 }
@@ -131,14 +166,18 @@ function createProductCard(product) {
   const image =
     getProductImage(product);
 
+
   const brand =
     product.brands?.name ||
     "Product";
 
+
   return `
     <a
       class="product-card"
-      href="product.html?slug=${encodeURIComponent(product.slug)}"
+      href="product.html?slug=${encodeURIComponent(
+        product.slug
+      )}"
     >
 
       <div class="product-image">
@@ -158,15 +197,23 @@ function createProductCard(product) {
           ${escapeHTML(brand)}
         </div>
 
+
         <h3 class="product-name">
           ${escapeHTML(product.name)}
         </h3>
 
-        <p class="product-description">
-          ${escapeHTML(
-            product.description || ""
-          )}
-        </p>
+
+        ${
+          product.description
+            ? `
+              <p class="product-description">
+                ${escapeHTML(
+                  product.description
+                )}
+              </p>
+            `
+            : ""
+        }
 
 
         <div class="product-bottom">
@@ -175,11 +222,15 @@ function createProductCard(product) {
             ${formatPrice(product.price)}
           </strong>
 
+
           ${
-            product.rating
+            product.rating !== null &&
+            product.rating !== undefined
               ? `
                 <span class="product-rating">
-                  ★ ${product.rating}
+                  ★ ${escapeHTML(
+                    product.rating
+                  )}
                 </span>
               `
               : ""
@@ -204,48 +255,54 @@ function renderProducts() {
     [...allProducts];
 
 
-  /* SEARCH */
+  /* SEARCH FILTER */
 
   if (currentSearch) {
 
     const search =
       currentSearch.toLowerCase();
 
+
     filtered =
       filtered.filter(product => {
 
         const name =
-          product.name?.toLowerCase() || "";
+          product.name
+            ?.toLowerCase() || "";
+
 
         const description =
-          product.description?.toLowerCase() || "";
+          product.description
+            ?.toLowerCase() || "";
+
 
         const brand =
-          product.brands?.name?.toLowerCase() || "";
+          product.brands?.name
+            ?.toLowerCase() || "";
+
 
         return (
           name.includes(search) ||
           description.includes(search) ||
           brand.includes(search)
         );
-
       });
   }
 
 
-  /* CATEGORY */
+  /* CATEGORY FILTER */
 
   if (currentCategory) {
 
     filtered =
       filtered.filter(product =>
-        product.category_id ===
-        currentCategory
+        String(product.category_id) ===
+        String(currentCategory)
       );
   }
 
 
-  /* COUNT */
+  /* RESULT COUNT */
 
   resultsCount.textContent =
     `${filtered.length} product${
@@ -255,23 +312,36 @@ function renderProducts() {
     }`;
 
 
-  /* TITLE */
+  /* RESULT TITLE */
 
   if (currentSearch) {
 
     resultsTitle.textContent =
       `Results for "${currentSearch}"`;
 
+  } else if (currentCategory) {
+
+    const category =
+      allCategories.find(
+        item =>
+          String(item.id) ===
+          String(currentCategory)
+      );
+
+
+    resultsTitle.textContent =
+      category
+        ? category.name
+        : "Category products";
+
   } else {
 
     resultsTitle.textContent =
-      currentCategory
-        ? "Category products"
-        : "All products";
+      "All products";
   }
 
 
-  /* EMPTY */
+  /* EMPTY STATE */
 
   if (!filtered.length) {
 
@@ -284,8 +354,8 @@ function renderProducts() {
 
         <br>
 
-        Try another search or remove
-        your filters.
+        Try another search or
+        remove your filters.
 
       </div>
     `;
@@ -293,6 +363,8 @@ function renderProducts() {
     return;
   }
 
+
+  /* RENDER */
 
   productsContainer.innerHTML =
     filtered
@@ -302,7 +374,7 @@ function renderProducts() {
 
 
 /* =========================================
-   RENDER CATEGORY FILTERS
+   CATEGORY FILTERS
 ========================================= */
 
 function renderCategoryFilters() {
@@ -311,17 +383,27 @@ function renderCategoryFilters() {
     allCategories
       .map(category => {
 
+        const checked =
+          String(category.id) ===
+          String(currentCategory);
+
+
         return `
           <label class="filter-option">
 
             <input
               type="radio"
               name="category"
-              value="${category.id}"
+              value="${escapeHTML(
+                category.id
+              )}"
+              ${checked ? "checked" : ""}
             >
 
             <span>
-              ${escapeHTML(category.name)}
+              ${escapeHTML(
+                category.name
+              )}
             </span>
 
           </label>
@@ -344,11 +426,60 @@ function renderCategoryFilters() {
           currentCategory =
             input.value;
 
+
+          updateURL();
+
+
           renderProducts();
         }
       );
-
     });
+}
+
+
+/* =========================================
+   UPDATE URL
+========================================= */
+
+function updateURL() {
+
+  const params =
+    new URLSearchParams();
+
+
+  if (currentSearch) {
+
+    params.set(
+      "q",
+      currentSearch
+    );
+  }
+
+
+  if (currentCategory) {
+
+    params.set(
+      "category",
+      currentCategory
+    );
+  }
+
+
+  const query =
+    params.toString();
+
+
+  const newURL =
+    query
+      ? `${window.location.pathname}?${query}`
+      : window.location.pathname;
+
+
+  window.history.replaceState(
+    {},
+    "",
+    newURL
+  );
 }
 
 
@@ -381,8 +512,42 @@ async function loadData() {
     allProducts =
       products;
 
+
     allCategories =
       categories;
+
+
+    /* URL SEARCH */
+
+    if (urlSearch) {
+
+      currentSearch =
+        urlSearch;
+
+
+      searchInput.value =
+        urlSearch;
+    }
+
+
+    /* URL CATEGORY */
+
+    if (urlCategory) {
+
+      const categoryExists =
+        categories.some(
+          category =>
+            String(category.id) ===
+            String(urlCategory)
+        );
+
+
+      if (categoryExists) {
+
+        currentCategory =
+          urlCategory;
+      }
+    }
 
 
     renderCategoryFilters();
@@ -392,23 +557,35 @@ async function loadData() {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Search loading error:",
+      error
+    );
+
 
     productsContainer.innerHTML = `
       <div class="error-message">
-        Unable to load products.
+
+        <strong>
+          Unable to load products.
+        </strong>
+
+        <br>
+
+        Please try again later.
+
       </div>
     `;
 
+
     resultsCount.textContent =
       "Unable to load";
-
   }
 }
 
 
 /* =========================================
-   SEARCH
+   SEARCH INPUT
 ========================================= */
 
 searchInput.addEventListener(
@@ -418,14 +595,17 @@ searchInput.addEventListener(
     currentSearch =
       searchInput.value.trim();
 
-    renderProducts();
 
+    updateURL();
+
+
+    renderProducts();
   }
 );
 
 
 /* =========================================
-   CLEAR
+   CLEAR SEARCH
 ========================================= */
 
 clearButton.addEventListener(
@@ -436,16 +616,17 @@ clearButton.addEventListener(
 
     currentSearch = "";
 
+    updateURL();
+
     renderProducts();
 
     searchInput.focus();
-
   }
 );
 
 
 /* =========================================
-   RESET
+   RESET FILTERS
 ========================================= */
 
 resetFilters.addEventListener(
@@ -458,16 +639,20 @@ resetFilters.addEventListener(
 
     searchInput.value = "";
 
+
     categoryFilters
       .querySelectorAll(
         'input[name="category"]'
       )
       .forEach(input => {
+
         input.checked = false;
       });
 
-    renderProducts();
 
+    updateURL();
+
+    renderProducts();
   }
 );
 
@@ -476,4 +661,7 @@ resetFilters.addEventListener(
    START
 ========================================= */
 
-loadData();
+document.addEventListener(
+  "DOMContentLoaded",
+  loadData
+);
