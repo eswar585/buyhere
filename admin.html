@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Admin — BuyHere</title>
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+</head>
+
+
+<body class="admin-page">
+
+  <!-- HEADER -->
+
+  <header class="site-header">
+
+    <div class="container header-inner">
+
+      <a
+        href="index.html"
+        class="site-logo"
+      >
+        BuyHere
+      </a>
+
+
+      <button
+        id="logout-button"
+        class="admin-logout"
+        type="button"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- LOGIN -->
+
+  <main>
+
+    <section
+      id="login-section"
+      class="admin-login-section"
+    >
+
+      <div class="admin-login-card">
+
+        <div class="admin-eyebrow">
+          ADMIN
+        </div>
+
+
+        <h1>
+          Welcome back.
+        </h1>
+
+
+        <p>
+          Sign in to manage your products.
+        </p>
+
+
+        <form id="login-form">
+
+          <div class="admin-field">
+
+            <label for="email">
+              Email
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              placeholder="Your email"
+              required
+              autocomplete="email"
+            >
+
+          </div>
+
+
+          <div class="admin-field">
+
+            <label for="password">
+              Password
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              placeholder="Your password"
+              required
+              autocomplete="current-password"
+            >
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="admin-primary-button"
+          >
+            Sign in
+          </button>
+
+
+          <div
+            id="login-message"
+            class="admin-message"
+          ></div>
+
+        </form>
+
+      </div>
+
+    </section>
+
+
+    <!-- DASHBOARD -->
+
+    <section
+      id="dashboard-section"
+      class="admin-dashboard"
+      hidden
+    >
+
+      <div class="container">
+
+        <div class="admin-dashboard-header">
+
+          <div>
+
+            <div class="admin-eyebrow">
+              DASHBOARD
+            </div>
+
+            <h1>
+              Products
+            </h1>
+
+            <p>
+              Add and manage your products.
+            </p>
+
+          </div>
+
+
+          <button
+            id="open-add-product"
+            class="admin-primary-button"
+            type="button"
+          >
+            + Add Product
+          </button>
+
+        </div>
+
+
+        <!-- ADD PRODUCT -->
+
+        <div
+          id="product-form-wrapper"
+          class="admin-form-card"
+          hidden
+        >
+
+          <div class="admin-form-header">
+
+            <div>
+
+              <div class="admin-eyebrow">
+                NEW PRODUCT
+              </div>
+
+              <h2>
+                Add a product
+              </h2>
+
+            </div>
+
+
+            <button
+              id="close-product-form"
+              class="admin-close-button"
+              type="button"
+            >
+              ×
+            </button>
+
+          </div>
+
+
+          <form id="product-form">
+
+            <div class="admin-field">
+
+              <label for="product-name">
+                Product name
+              </label>
+
+              <input
+                id="product-name"
+                type="text"
+                placeholder="Sony WH-1000XM5"
+                required
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label for="product-price">
+                Price
+              </label>
+
+              <input
+                id="product-price"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="29990"
+                required
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label for="product-image">
+                Product image
+              </label>
+
+              <input
+                id="product-image"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                required
+              >
+
+              <div
+                id="image-preview"
+                class="admin-image-preview"
+              ></div>
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label for="product-url">
+                Check out URL
+              </label>
+
+              <input
+                id="product-url"
+                type="url"
+                placeholder="https://..."
+                required
+              >
+
+            </div>
+
+
+            <div
+              id="product-message"
+              class="admin-message"
+            ></div>
+
+
+            <div class="admin-form-actions">
+
+              <button
+                type="button"
+                id="cancel-product"
+                class="admin-secondary-button"
+              >
+                Cancel
+              </button>
+
+
+              <button
+                type="submit"
+                class="admin-primary-button"
+              >
+                Add Product
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+
+        <!-- PRODUCT LIST -->
+
+        <div class="admin-products-wrapper">
+
+          <div class="admin-section-heading">
+
+            <h2>
+              Your products
+            </h2>
+
+            <span
+              id="admin-product-count"
+            >
+              0 products
+            </span>
+
+          </div>
+
+
+          <div
+            id="admin-products"
+            class="admin-products-list"
+          >
+
+            <div class="admin-loading">
+              Loading products...
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+
+</html>
