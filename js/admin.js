@@ -2,6 +2,12 @@
    BUYHERE ADMIN CONTROLLER (js/admin.js)
 ========================================================= */
 
+// 1. Session Guard Check (Must execute immediately)
+const token = localStorage.getItem("sb_access_token");
+if (!token) {
+  window.location.href = "login.html";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("add-product-form");
   if (form) {
@@ -22,7 +28,6 @@ async function handleAddProduct(e) {
   const checkoutInput = document.getElementById("product-checkout");
   const imageInput = document.getElementById("product-image");
   const descInput = document.getElementById("product-description");
-  const submitBtn = document.getElementById("submit-btn");
 
   const name = nameInput.value.trim();
   const price = parseFloat(priceInput.value);
@@ -47,14 +52,14 @@ async function handleAddProduct(e) {
       method: "POST",
       headers: {
         apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": imageFile.type
       },
       body: imageFile
     });
 
     if (!uploadRes.ok) {
-      throw new Error("Failed to upload image. Ensure 'product-images' storage bucket exists and is public.");
+      throw new Error("Failed to upload image. Ensure 'product-images' storage bucket exists and is set to public.");
     }
 
     const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
@@ -73,7 +78,7 @@ async function handleAddProduct(e) {
       method: "POST",
       headers: {
         apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
         Prefer: "return=representation"
       },
@@ -89,7 +94,7 @@ async function handleAddProduct(e) {
       method: "POST",
       headers: {
         apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -99,7 +104,7 @@ async function handleAddProduct(e) {
     });
 
     showStatus("Product added successfully!", true);
-    form.reset();
+    document.getElementById("add-product-form").reset();
     loadAdminProducts();
 
   } catch (error) {
@@ -121,7 +126,7 @@ async function loadAdminProducts() {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/products?select=id,name,price&order=created_at.desc`, {
       headers: {
         apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -160,7 +165,7 @@ async function deleteProduct(productId) {
       method: "DELETE",
       headers: {
         apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -169,6 +174,14 @@ async function deleteProduct(productId) {
   } catch (err) {
     alert("Error deleting product: " + err.message);
   }
+}
+
+/**
+ * Logs out the admin user and redirects to login
+ */
+function logoutAdmin() {
+  localStorage.removeItem("sb_access_token");
+  window.location.href = "login.html";
 }
 
 function showStatus(message, isSuccess) {
