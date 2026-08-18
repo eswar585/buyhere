@@ -1,239 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
 
-    <title>BuyHere</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-    <meta
-        name="description"
-        content="Discover products worth knowing about."
-    >
+  <title>BuyHere — Discover Products</title>
 
-    <link rel="stylesheet" href="css/style.css">
+  <meta
+    name="description"
+    content="Discover useful products, compare prices, and find the right product for you."
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
 </head>
+
 
 <body>
 
-    <header class="site-header">
+  <!-- =========================================
+       HEADER
+  ========================================== -->
 
-        <div class="container header-inner">
+  <header class="site-header">
 
-            <a href="index.html" class="logo">
-                Buy<span>Here</span>
-            </a>
+    <div class="container header-inner">
 
-            <nav class="main-nav">
-                <a href="index.html">Home</a>
-                <a href="category.html">Categories</a>
-                <a href="search.html">Explore</a>
-            </nav>
+      <!-- LOGO -->
 
-            <a href="search.html" class="header-search">
-                Search products
-            </a>
+      <a
+        href="index.html"
+        class="site-logo"
+      >
+        BuyHere
+      </a>
+
+
+      <!-- SEARCH -->
+
+      <form
+        class="search-form"
+        action="search.html"
+        method="GET"
+      >
+
+        <input
+          type="search"
+          name="q"
+          id="home-search-input"
+          placeholder="Search products..."
+          autocomplete="off"
+          aria-label="Search products"
+        >
+
+        <button
+          type="submit"
+          aria-label="Search"
+        >
+          Search
+        </button>
+
+      </form>
+
+
+      <!-- HOME -->
+
+      <a
+        href="index.html"
+        class="header-home-link"
+      >
+        Home
+      </a>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================================
+       HERO
+  ========================================== -->
+
+  <main>
+
+    <section class="hero-section">
+
+      <div class="container hero-container">
+
+        <div class="hero-content">
+
+          <div class="hero-eyebrow">
+            DISCOVER SOMETHING BETTER
+          </div>
+
+
+          <h1>
+            Find products
+            <br>
+            worth buying.
+          </h1>
+
+
+          <p>
+            Explore a carefully selected collection
+            of products and find what fits you best.
+          </p>
+
+
+          <!-- HERO SEARCH -->
+
+          <form
+            class="hero-search-form"
+            action="search.html"
+            method="GET"
+          >
+
+            <input
+              type="search"
+              name="q"
+              placeholder="What are you looking for?"
+              autocomplete="off"
+              aria-label="Search products"
+            >
+
+            <button
+              type="submit"
+            >
+              Search
+            </button>
+
+          </form>
 
         </div>
 
-    </header>
+      </div>
+
+    </section>
 
 
-    <main>
 
-        <section class="hero">
+    <!-- =========================================
+         PRODUCTS
+    ========================================== -->
 
-            <div class="container hero-inner">
+    <section class="products-section">
 
-                <div class="hero-content">
+      <div class="container">
 
-                    <span class="eyebrow">
-                        DISCOVER SOMETHING BETTER
-                    </span>
+        <div class="section-heading">
 
-                    <h1>
-                        Find products
-                        <span>worth choosing.</span>
-                    </h1>
+          <div>
 
-                    <p>
-                        Explore carefully selected products,
-                        discover useful features, and find
-                        something that fits your needs.
-                    </p>
-
-                    <div class="hero-actions">
-
-                        <a
-                            href="search.html"
-                            class="button button-primary"
-                        >
-                            Explore products
-                        </a>
-
-                        <a
-                            href="category.html"
-                            class="button button-secondary"
-                        >
-                            Browse categories
-                        </a>
-
-                    </div>
-
-                </div>
-
+            <div class="section-eyebrow">
+              COLLECTION
             </div>
 
-        </section>
+            <h2>
+              Latest products
+            </h2>
+
+          </div>
 
 
-        <section class="section">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <div>
-                        <span class="section-label">
-                            FEATURED
-                        </span>
-
-                        <h2>
-                            Featured products
-                        </h2>
-                    </div>
-
-                    <a href="search.html" class="view-all">
-                        View all →
-                    </a>
-
-                </div>
-
-
-                <div
-                    id="featured-products"
-                    class="product-grid"
-                >
-
-                    <div class="loading-card">
-                        Loading products...
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <section class="section section-muted">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <div>
-                        <span class="section-label">
-                            EXPLORE
-                        </span>
-
-                        <h2>
-                            Browse categories
-                        </h2>
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="categories"
-                    class="category-grid"
-                >
-
-                    <div class="loading-card">
-                        Loading categories...
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <section class="section">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <div>
-                        <span class="section-label">
-                            TRENDING
-                        </span>
-
-                        <h2>
-                            Popular right now
-                        </h2>
-
-                    </div>
-
-                    <a href="search.html" class="view-all">
-                        Explore →
-                    </a>
-
-                </div>
-
-
-                <div
-                    id="trending-products"
-                    class="product-grid"
-                >
-
-                    <div class="loading-card">
-                        Loading products...
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <footer class="site-footer">
-
-        <div class="container footer-inner">
-
-            <div>
-
-                <a href="index.html" class="logo">
-                    Buy<span>Here</span>
-                </a>
-
-                <p>
-                    Discover products worth choosing.
-                </p>
-
-            </div>
-
-            <div class="footer-links">
-
-                <a href="index.html">Home</a>
-                <a href="category.html">Categories</a>
-                <a href="search.html">Explore</a>
-
-            </div>
+          <a
+            href="search.html"
+            class="section-link"
+          >
+            Explore all
+          </a>
 
         </div>
 
-    </footer>
+
+        <!-- PRODUCT GRID -->
+
+        <div
+          id="products-grid"
+          class="product-grid"
+        >
+
+          <!-- Products are loaded by home.js -->
+
+          <div class="product-loading">
+            Loading products...
+          </div>
+
+        </div>
 
 
-    <script src="js/config.js"></script>
-    <script src="js/home.js"></script>
+        <!-- EMPTY STATE -->
+
+        <div
+          id="products-empty"
+          class="products-empty"
+          hidden
+        >
+
+          <h3>
+            No products yet
+          </h3>
+
+          <p>
+            Products will appear here once they are added.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- =========================================
+       FOOTER
+  ========================================== -->
+
+  <footer class="site-footer">
+
+    <div class="container footer-inner">
+
+      <div class="footer-brand">
+
+        <a
+          href="index.html"
+          class="site-logo"
+        >
+          BuyHere
+        </a>
+
+        <p>
+          Discover products worth buying.
+        </p>
+
+      </div>
+
+
+      <div class="footer-links">
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="search.html">
+          Search
+        </a>
+
+        <a href="admin.html">
+          Admin
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+      <p>
+        © 2026 BuyHere. All rights reserved.
+      </p>
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- =========================================
+       JAVASCRIPT
+  ========================================== -->
+
+  <script src="js/config.js"></script>
+  <script src="js/home.js"></script>
 
 </body>
+
 </html>
