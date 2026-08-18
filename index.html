@@ -1,96 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechPicks | Curated Gear & Recommendations</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BuyHere</title>
+
+    <meta
+        name="description"
+        content="Discover products worth knowing about."
+    >
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-  <!-- Top Affiliate Disclosure Banner -->
-  <div class="affiliate-bar">
-    <p><strong>Disclosure:</strong> As an affiliate, we may earn a small commission from qualifying purchases made through links on this site, at no extra cost to you.</p>
-  </div>
+    <header class="site-header">
 
-  <!-- Header & Navigation -->
-  <header>
-    <div class="logo">TechPicks</div>
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
-    </div>
-  </header>
+        <div class="container header-inner">
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>Top Recommended Gear for 2026</h1>
-    <p>Hand-tested tech recommendations with direct, reliable buy links.</p>
-  </section>
+            <a href="index.html" class="logo">
+                Buy<span>Here</span>
+            </a>
 
-  <!-- Main Content: Product Grid -->
-  <main class="grid-container" id="productGrid">
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="category.html">Categories</a>
+                <a href="search.html">Explore</a>
+            </nav>
 
-    <!-- Product Card 1 -->
-    <article class="card" data-title="Wireless Noise-Canceling Headphones">
-      <div class="badge">Top Pick</div>
-      <img src="https://via.placeholder.com/300x200?text=Headphones" alt="Noise-Canceling Headphones">
-      <div class="card-body">
-        <span class="category">Audio</span>
-        <h3>Wireless Noise-Canceling Headphones</h3>
-        <p class="description">Industry-leading noise cancellation with 30-hour battery life and pristine audio clarity.</p>
-        <div class="price-row">
-          <span class="price">$299.99</span>
-          <!-- Affiliate Outbound Button -->
-          <a href="https://example.com/affiliate-link-1" target="_blank" rel="sponsored nofollow noopener" class="buy-btn">
-            Buy on Retailer →
-          </a>
+            <a href="search.html" class="header-search">
+                Search products
+            </a>
+
         </div>
-      </div>
-    </article>
 
-    <!-- Product Card 2 -->
-    <article class="card" data-title="Ultra-Slim Mechanical Keyboard">
-      <div class="badge">Best Value</div>
-      <img src="https://via.placeholder.com/300x200?text=Keyboard" alt="Mechanical Keyboard">
-      <div class="card-body">
-        <span class="category">Peripherals</span>
-        <h3>Ultra-Slim Mechanical Keyboard</h3>
-        <p class="description">Tactile wireless mechanical keyboard designed for maximum productivity and minimal wrist fatigue.</p>
-        <div class="price-row">
-          <span class="price">$119.50</span>
-          <!-- Affiliate Outbound Button -->
-          <a href="https://example.com/affiliate-link-2" target="_blank" rel="sponsored nofollow noopener" class="buy-btn">
-            Buy on Retailer →
-          </a>
+    </header>
+
+
+    <main>
+
+        <section class="hero">
+
+            <div class="container hero-inner">
+
+                <div class="hero-content">
+
+                    <span class="eyebrow">
+                        DISCOVER SOMETHING BETTER
+                    </span>
+
+                    <h1>
+                        Find products
+                        <span>worth choosing.</span>
+                    </h1>
+
+                    <p>
+                        Explore carefully selected products,
+                        discover useful features, and find
+                        something that fits your needs.
+                    </p>
+
+                    <div class="hero-actions">
+
+                        <a
+                            href="search.html"
+                            class="button button-primary"
+                        >
+                            Explore products
+                        </a>
+
+                        <a
+                            href="category.html"
+                            class="button button-secondary"
+                        >
+                            Browse categories
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="section-label">
+                            FEATURED
+                        </span>
+
+                        <h2>
+                            Featured products
+                        </h2>
+                    </div>
+
+                    <a href="search.html" class="view-all">
+                        View all →
+                    </a>
+
+                </div>
+
+
+                <div
+                    id="featured-products"
+                    class="product-grid"
+                >
+
+                    <div class="loading-card">
+                        Loading products...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section section-muted">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="section-label">
+                            EXPLORE
+                        </span>
+
+                        <h2>
+                            Browse categories
+                        </h2>
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="categories"
+                    class="category-grid"
+                >
+
+                    <div class="loading-card">
+                        Loading categories...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="section-label">
+                            TRENDING
+                        </span>
+
+                        <h2>
+                            Popular right now
+                        </h2>
+
+                    </div>
+
+                    <a href="search.html" class="view-all">
+                        Explore →
+                    </a>
+
+                </div>
+
+
+                <div
+                    id="trending-products"
+                    class="product-grid"
+                >
+
+                    <div class="loading-card">
+                        Loading products...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="site-footer">
+
+        <div class="container footer-inner">
+
+            <div>
+
+                <a href="index.html" class="logo">
+                    Buy<span>Here</span>
+                </a>
+
+                <p>
+                    Discover products worth choosing.
+                </p>
+
+            </div>
+
+            <div class="footer-links">
+
+                <a href="index.html">Home</a>
+                <a href="category.html">Categories</a>
+                <a href="search.html">Explore</a>
+
+            </div>
+
         </div>
-      </div>
-    </article>
 
-    <!-- Product Card 3 -->
-    <article class="card" data-title="Ergonomic Desk Chair">
-      <img src="https://via.placeholder.com/300x200?text=Chair" alt="Ergonomic Desk Chair">
-      <div class="card-body">
-        <span class="category">Workspace</span>
-        <h3>Ergonomic Desk Chair</h3>
-        <p class="description">Breathable mesh chair featuring adjustable lumbar support and 3D armrests for all-day comfort.</p>
-        <div class="price-row">
-          <span class="price">$349.00</span>
-          <!-- Affiliate Outbound Button -->
-          <a href="https://example.com/affiliate-link-3" target="_blank" rel="sponsored nofollow noopener" class="buy-btn">
-            Buy on Retailer →
-          </a>
-        </div>
-      </div>
-    </article>
+    </footer>
 
-  </main>
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2026 TechPicks. All rights reserved.</p>
-    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Affiliate Disclosure</a></p>
-  </footer>
+    <script src="js/config.js"></script>
+    <script src="js/home.js"></script>
 
-  <script src="script.js"></script>
 </body>
 </html>
