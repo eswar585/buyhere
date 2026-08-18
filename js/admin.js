@@ -728,6 +728,9 @@ productForm.addEventListener(
               price,
 
               product_url:
+                productURL,
+
+              destination_url:
                 productURL
 
             }
