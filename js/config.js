@@ -2,9 +2,9 @@
    BUYHERE CONFIGURATION & HELPERS (js/config.js)
 ========================================================= */
 
-// Supabase API Configuration (Replace with your actual keys)
-const SUPABASE_URL = "https://your-supabase-project.supabase.co";
-const SUPABASE_ANON_KEY = "your-anon-key-here";
+// Supabase API Configuration
+const SUPABASE_URL = "https://grmgrvlcgdjgeqnwwvos.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdybWdydmxjZ2RqZ2Vxbnd3dm9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NjY2MjcsImV4cCI6MjEwMjU0MjYyN30.ertuXZCkQX4sfOSvxF6UY7zC56MP_qCx4_hLDPdJ5Xw";
 
 /**
  * Safely escapes HTML characters to prevent XSS attacks
