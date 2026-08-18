@@ -1,390 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Product — BuyHere</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details — BuyHere</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .product-detail-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      background: #fff;
+      padding: 32px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+    .product-detail-image img {
+      width: 100%;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+    }
+    .product-detail-info h1 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+    .product-detail-price {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .product-detail-description {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    @media (max-width: 768px) {
+      .product-detail-container { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 
 <body>
 
   <!-- HEADER -->
-
   <header class="site-header">
-
     <div class="container header-inner">
-
-      <a href="index.html" class="logo">
-        Buy<span>Here</span>
+      <a href="index.html" class="brand">
+        <img src="images/logo.png" alt="BuyHere Logo" class="brand-logo-img">
       </a>
 
-      <nav class="main-nav">
+      <form class="search-form" action="search.html" method="GET">
+        <input type="search" name="q" placeholder="Search products..." autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
 
-        <a href="index.html">
-          Home
-        </a>
-
-        <a href="search.html">
-          Explore
-        </a>
-
-        <a href="category.html">
-          Categories
-        </a>
-
-      </nav>
-
-      <a
-        href="search.html"
-        class="header-search"
-      >
-        <span class="search-icon">⌕</span>
-        <span>Search products</span>
-      </a>
-
+      <a href="index.html" class="header-home-link">Home</a>
     </div>
-
   </header>
 
-
-  <!-- PRODUCT -->
-
-  <main>
-
-    <section class="product-page">
-
-      <div class="container">
-
-        <!-- BREADCRUMB -->
-
-        <div class="product-breadcrumb">
-
-          <a href="index.html">
-            Home
-          </a>
-
-          <span>/</span>
-
-          <a href="search.html">
-            Explore
-          </a>
-
-          <span>/</span>
-
-          <span id="breadcrumb-product">
-            Product
-          </span>
-
-        </div>
-
-
-        <!-- PRODUCT CONTENT -->
-
-        <div
-          id="product-container"
-          class="product-layout"
-        >
-
-          <!-- IMAGE -->
-
-          <div class="product-gallery">
-
-            <div class="product-main-image">
-
-              <img
-                id="product-image"
-                src="https://placehold.co/900x900/f4f5f6/777?text=Loading"
-                alt="Loading product"
-              >
-
-            </div>
-
-          </div>
-
-
-          <!-- INFORMATION -->
-
-          <div class="product-information">
-
-            <div
-              id="product-brand"
-              class="product-detail-brand"
-            >
-              Loading...
-            </div>
-
-
-            <h1
-              id="product-name"
-              class="product-detail-name"
-            >
-              Loading product...
-            </h1>
-
-
-            <div
-              id="product-rating"
-              class="product-detail-rating"
-            >
-            </div>
-
-
-            <div
-              id="product-price"
-              class="product-detail-price"
-            >
-            </div>
-
-
-            <p
-              id="product-description"
-              class="product-detail-description"
-            >
-            </p>
-
-
-            <div class="product-actions">
-
-              <a
-                id="product-link"
-                href="#"
-                target="_blank"
-                rel="nofollow sponsored noopener"
-                class="primary-product-button"
-              >
-                View product
-              </a>
-
-            </div>
-
-
-            <div class="product-note">
-
-              <span class="product-note-icon">
-                ✓
-              </span>
-
-              <span>
-                Check the product page for the
-                latest availability and details.
-              </span>
-
-            </div>
-
-
-            <!-- FEATURES -->
-
-            <div
-              id="product-features-section"
-              class="product-info-section"
-            >
-
-              <h2>
-                Key features
-              </h2>
-
-              <div
-                id="product-features"
-                class="product-features"
-              >
-              </div>
-
-            </div>
-
-
-            <!-- SPECIFICATIONS -->
-
-            <div
-              id="product-specs-section"
-              class="product-info-section"
-            >
-
-              <h2>
-                Specifications
-              </h2>
-
-              <div
-                id="product-specifications"
-                class="product-specifications"
-              >
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- ERROR -->
-
-        <div
-          id="product-error"
-          class="product-error"
-          hidden
-        >
-
-          <h2>
-            Product not found
-          </h2>
-
-          <p>
-            We couldn't find the product you're
-            looking for.
-          </p>
-
-          <a
-            href="search.html"
-            class="primary-product-button"
-          >
-            Explore products
-          </a>
-
-        </div>
-
+  <!-- MAIN DETAIL -->
+  <main class="container">
+    <div id="product-container" class="product-detail-container">
+      <div class="product-detail-image">
+        <img id="product-image" src="https://placehold.co/500x500/f5f5f5/777?text=Loading..." alt="Product Image">
       </div>
-
-    </section>
-
-
-    <!-- RELATED PRODUCTS -->
-
-    <section class="section related-section">
-
-      <div class="container">
-
-        <div class="section-heading">
-
-          <div>
-
-            <span class="section-label">
-              DISCOVER MORE
-            </span>
-
-            <h2>
-              You may also like
-            </h2>
-
-          </div>
-
-          <a
-            href="search.html"
-            class="text-link"
-          >
-            Explore all →
-          </a>
-
-        </div>
-
-
-        <div
-          id="related-products"
-          class="product-grid"
-        >
-        </div>
-
+      <div class="product-detail-info">
+        <h1 id="product-name">Loading...</h1>
+        <div id="product-price" class="product-detail-price">₹0</div>
+        <p id="product-description" class="product-detail-description">Loading details...</p>
+        <a id="product-link" href="#" target="_blank" rel="nofollow sponsored noopener" class="checkout-button">
+          Buy Now / View Deal
+        </a>
       </div>
-
-    </section>
-
+    </div>
   </main>
 
-
   <!-- FOOTER -->
-
   <footer class="site-footer">
-
-    <div class="container footer-main">
-
+    <div class="container footer-inner">
       <div class="footer-brand">
-
-        <a href="index.html" class="logo">
-          Buy<span>Here</span>
+        <a href="index.html" class="brand">
+          <img src="images/logo.png" alt="BuyHere Logo" class="brand-logo-img">
         </a>
-
-        <p>
-          Discover products worth choosing.
-        </p>
-
+        <p>Promote. Discover. Shop.</p>
       </div>
-
-
-      <div class="footer-column">
-
-        <h3>
-          Explore
-        </h3>
-
-        <a href="index.html">
-          Home
-        </a>
-
-        <a href="search.html">
-          Products
-        </a>
-
-        <a href="category.html">
-          Categories
-        </a>
-
-      </div>
-
-
-      <div class="footer-column">
-
-        <h3>
-          Information
-        </h3>
-
-        <a href="#">
-          About
-        </a>
-
-        <a href="#">
-          Contact
-        </a>
-
-      </div>
-
+      <p class="footer-copyright">© 2026 BuyHere. All rights reserved.</p>
     </div>
-
-
-    <div class="container footer-bottom">
-
-      <span>
-        © 2026 BuyHere. All rights reserved.
-      </span>
-
-      <span>
-        Discover better products.
-      </span>
-
-    </div>
-
   </footer>
-
 
   <script src="js/config.js"></script>
   <script src="js/product.js"></script>
-
 </body>
+
 </html>
