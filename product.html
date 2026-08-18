@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Product — BuyHere</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header class="site-header">
+
+    <div class="container header-inner">
+
+      <a href="index.html" class="logo">
+        Buy<span>Here</span>
+      </a>
+
+      <nav class="main-nav">
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="search.html">
+          Explore
+        </a>
+
+        <a href="category.html">
+          Categories
+        </a>
+
+      </nav>
+
+      <a
+        href="search.html"
+        class="header-search"
+      >
+        <span class="search-icon">⌕</span>
+        <span>Search products</span>
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- PRODUCT -->
+
+  <main>
+
+    <section class="product-page">
+
+      <div class="container">
+
+        <!-- BREADCRUMB -->
+
+        <div class="product-breadcrumb">
+
+          <a href="index.html">
+            Home
+          </a>
+
+          <span>/</span>
+
+          <a href="search.html">
+            Explore
+          </a>
+
+          <span>/</span>
+
+          <span id="breadcrumb-product">
+            Product
+          </span>
+
+        </div>
+
+
+        <!-- PRODUCT CONTENT -->
+
+        <div
+          id="product-container"
+          class="product-layout"
+        >
+
+          <!-- IMAGE -->
+
+          <div class="product-gallery">
+
+            <div class="product-main-image">
+
+              <img
+                id="product-image"
+                src="https://placehold.co/900x900/f4f5f6/777?text=Loading"
+                alt="Loading product"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- INFORMATION -->
+
+          <div class="product-information">
+
+            <div
+              id="product-brand"
+              class="product-detail-brand"
+            >
+              Loading...
+            </div>
+
+
+            <h1
+              id="product-name"
+              class="product-detail-name"
+            >
+              Loading product...
+            </h1>
+
+
+            <div
+              id="product-rating"
+              class="product-detail-rating"
+            >
+            </div>
+
+
+            <div
+              id="product-price"
+              class="product-detail-price"
+            >
+            </div>
+
+
+            <p
+              id="product-description"
+              class="product-detail-description"
+            >
+            </p>
+
+
+            <div class="product-actions">
+
+              <a
+                id="product-link"
+                href="#"
+                target="_blank"
+                rel="nofollow sponsored noopener"
+                class="primary-product-button"
+              >
+                View product
+              </a>
+
+            </div>
+
+
+            <div class="product-note">
+
+              <span class="product-note-icon">
+                ✓
+              </span>
+
+              <span>
+                Check the product page for the
+                latest availability and details.
+              </span>
+
+            </div>
+
+
+            <!-- FEATURES -->
+
+            <div
+              id="product-features-section"
+              class="product-info-section"
+            >
+
+              <h2>
+                Key features
+              </h2>
+
+              <div
+                id="product-features"
+                class="product-features"
+              >
+              </div>
+
+            </div>
+
+
+            <!-- SPECIFICATIONS -->
+
+            <div
+              id="product-specs-section"
+              class="product-info-section"
+            >
+
+              <h2>
+                Specifications
+              </h2>
+
+              <div
+                id="product-specifications"
+                class="product-specifications"
+              >
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+          id="product-error"
+          class="product-error"
+          hidden
+        >
+
+          <h2>
+            Product not found
+          </h2>
+
+          <p>
+            We couldn't find the product you're
+            looking for.
+          </p>
+
+          <a
+            href="search.html"
+            class="primary-product-button"
+          >
+            Explore products
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- RELATED PRODUCTS -->
+
+    <section class="section related-section">
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div>
+
+            <span class="section-label">
+              DISCOVER MORE
+            </span>
+
+            <h2>
+              You may also like
+            </h2>
+
+          </div>
+
+          <a
+            href="search.html"
+            class="text-link"
+          >
+            Explore all →
+          </a>
+
+        </div>
+
+
+        <div
+          id="related-products"
+          class="product-grid"
+        >
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer class="site-footer">
+
+    <div class="container footer-main">
+
+      <div class="footer-brand">
+
+        <a href="index.html" class="logo">
+          Buy<span>Here</span>
+        </a>
+
+        <p>
+          Discover products worth choosing.
+        </p>
+
+      </div>
+
+
+      <div class="footer-column">
+
+        <h3>
+          Explore
+        </h3>
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="search.html">
+          Products
+        </a>
+
+        <a href="category.html">
+          Categories
+        </a>
+
+      </div>
+
+
+      <div class="footer-column">
+
+        <h3>
+          Information
+        </h3>
+
+        <a href="#">
+          About
+        </a>
+
+        <a href="#">
+          Contact
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+      <span>
+        © 2026 BuyHere. All rights reserved.
+      </span>
+
+      <span>
+        Discover better products.
+      </span>
+
+    </div>
+
+  </footer>
+
+
+  <script src="js/config.js"></script>
+  <script src="js/product.js"></script>
+
+</body>
+</html>
