@@ -1,73 +1,66 @@
-const productsContainer =
-  document.getElementById("search-products");
+const SUPABASE_URL =
+  window.SUPABASE_URL;
 
-const searchInput =
-  document.getElementById("search-input");
-
-const clearButton =
-  document.getElementById("clear-search");
-
-const resultsCount =
-  document.getElementById("results-count");
-
-const resultsTitle =
-  document.getElementById("results-title");
-
-const categoryFilters =
-  document.getElementById("category-filters");
-
-const resetFilters =
-  document.getElementById("reset-filters");
-
-
-let allProducts = [];
-let allCategories = [];
-
-let currentSearch = "";
-let currentCategory = "";
+const SUPABASE_ANON_KEY =
+  window.SUPABASE_ANON_KEY;
 
 
 /* =========================================
-   READ URL PARAMETERS
+   ELEMENTS
 ========================================= */
 
-const urlParams =
-  new URLSearchParams(
-    window.location.search
+const searchResults =
+  document.getElementById(
+    "search-results"
   );
 
-const urlCategory =
-  urlParams.get("category");
+const noResults =
+  document.getElementById(
+    "no-results"
+  );
 
-const urlSearch =
-  urlParams.get("q");
+const searchTitle =
+  document.getElementById(
+    "search-title"
+  );
+
+const searchDescription =
+  document.getElementById(
+    "search-description"
+  );
+
+const searchInput =
+  document.getElementById(
+    "search-input"
+  );
 
 
 /* =========================================
    SUPABASE REQUEST
 ========================================= */
 
-async function supabaseRequest(
-  table,
-  query = ""
-) {
+async function getProducts() {
 
-  const response = await fetch(
-    `${SUPABASE_URL}/rest/v1/${table}${query}`,
-    {
-      method: "GET",
+  const url =
+    `${SUPABASE_URL}/rest/v1/products` +
+    `?select=id,name,price,slug,product_url,` +
+    `product_images(image_url,alt_text,sort_order)` +
+    `&order=created_at.desc`;
+
+
+  const response =
+    await fetch(url, {
 
       headers: {
-        apikey: SUPABASE_ANON_KEY,
+
+        apikey:
+          SUPABASE_ANON_KEY,
 
         Authorization:
-          `Bearer ${SUPABASE_ANON_KEY}`,
-
-        "Content-Type":
-          "application/json"
+          `Bearer ${SUPABASE_ANON_KEY}`
       }
-    }
-  );
+
+    });
 
 
   if (!response.ok) {
@@ -92,11 +85,26 @@ async function supabaseRequest(
 function escapeHTML(value) {
 
   return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 }
 
 
@@ -105,16 +113,6 @@ function escapeHTML(value) {
 ========================================= */
 
 function formatPrice(price) {
-
-  if (
-    price === null ||
-    price === undefined ||
-    price === ""
-  ) {
-
-    return "Price unavailable";
-  }
-
 
   return new Intl.NumberFormat(
     "en-IN",
@@ -128,32 +126,33 @@ function formatPrice(price) {
 
 
 /* =========================================
-   PRODUCT IMAGE
+   GET IMAGE
 ========================================= */
 
 function getProductImage(product) {
 
-  if (
-    product.product_images &&
-    product.product_images.length
-  ) {
-
-    const images =
-      [...product.product_images];
+  const images =
+    product.product_images || [];
 
 
-    images.sort(
+  if (!images.length) {
+
+    return "https://placehold.co/600x600/f5f5f5/777?text=Product";
+  }
+
+
+  const sorted =
+    [...images].sort(
       (a, b) =>
         (a.sort_order || 0) -
         (b.sort_order || 0)
     );
 
 
-    return images[0].image_url;
-  }
-
-
-  return "https://placehold.co/800x800/f4f5f6/777?text=Product";
+  return (
+    sorted[0].image_url ||
+    "https://placehold.co/600x600/f5f5f5/777?text=Product"
+  );
 }
 
 
@@ -167,71 +166,77 @@ function createProductCard(product) {
     getProductImage(product);
 
 
-  const brand =
-    product.brands?.name ||
-    "Product";
+  const productPage =
+    product.slug
+      ? `product.html?slug=${encodeURIComponent(
+          product.slug
+        )}`
+      : `product.html?id=${encodeURIComponent(
+          product.id
+        )}`;
 
 
   return `
-    <a
-      class="product-card"
-      href="product.html?slug=${encodeURIComponent(
-        product.slug
-      )}"
-    >
+    <article class="product-card">
 
-      <div class="product-image">
+      <a
+        href="${productPage}"
+        class="product-image-link"
+      >
 
-        <img
-          src="${escapeHTML(image)}"
-          alt="${escapeHTML(product.name)}"
-          loading="lazy"
-        >
+        <div class="product-image-wrapper">
 
-      </div>
+          <img
+            src="${escapeHTML(image)}"
+            alt="${escapeHTML(
+              product.name
+            )}"
+            class="product-image"
+            loading="lazy"
+          >
 
-
-      <div class="product-content">
-
-        <div class="product-brand">
-          ${escapeHTML(brand)}
         </div>
 
+      </a>
+
+
+      <div class="product-card-content">
 
         <h3 class="product-name">
-          ${escapeHTML(product.name)}
+
+          <a
+            href="${productPage}"
+          >
+            ${escapeHTML(
+              product.name
+            )}
+          </a>
+
         </h3>
 
 
-        ${
-          product.description
-            ? `
-              <p class="product-description">
-                ${escapeHTML(
-                  product.description
-                )}
-              </p>
-            `
-            : ""
-        }
+        <div class="product-card-bottom">
 
-
-        <div class="product-bottom">
-
-          <strong class="product-price">
-            ${formatPrice(product.price)}
-          </strong>
+          <span class="product-price">
+            ${formatPrice(
+              product.price
+            )}
+          </span>
 
 
           ${
-            product.rating !== null &&
-            product.rating !== undefined
+            product.product_url
               ? `
-                <span class="product-rating">
-                  ★ ${escapeHTML(
-                    product.rating
-                  )}
-                </span>
+                <a
+                  href="${escapeHTML(
+                    product.product_url
+                  )}"
+                  class="product-checkout"
+                  target="_blank"
+                  rel="nofollow sponsored noopener"
+                >
+                  Check out
+                </a>
               `
               : ""
           }
@@ -240,428 +245,142 @@ function createProductCard(product) {
 
       </div>
 
-    </a>
+    </article>
   `;
 }
 
 
 /* =========================================
-   RENDER PRODUCTS
+   SEARCH
 ========================================= */
 
-function renderProducts() {
-
-  let filtered =
-    [...allProducts];
-
-
-  /* SEARCH FILTER */
-
-  if (currentSearch) {
-
-    const search =
-      currentSearch.toLowerCase();
-
-
-    filtered =
-      filtered.filter(product => {
-
-        const name =
-          product.name
-            ?.toLowerCase() || "";
-
-
-        const description =
-          product.description
-            ?.toLowerCase() || "";
-
-
-        const brand =
-          product.brands?.name
-            ?.toLowerCase() || "";
-
-
-        return (
-          name.includes(search) ||
-          description.includes(search) ||
-          brand.includes(search)
-        );
-      });
-  }
-
-
-  /* CATEGORY FILTER */
-
-  if (currentCategory) {
-
-    filtered =
-      filtered.filter(product =>
-        String(product.category_id) ===
-        String(currentCategory)
-      );
-  }
-
-
-  /* RESULT COUNT */
-
-  resultsCount.textContent =
-    `${filtered.length} product${
-      filtered.length === 1
-        ? ""
-        : "s"
-    }`;
-
-
-  /* RESULT TITLE */
-
-  if (currentSearch) {
-
-    resultsTitle.textContent =
-      `Results for "${currentSearch}"`;
-
-  } else if (currentCategory) {
-
-    const category =
-      allCategories.find(
-        item =>
-          String(item.id) ===
-          String(currentCategory)
-      );
-
-
-    resultsTitle.textContent =
-      category
-        ? category.name
-        : "Category products";
-
-  } else {
-
-    resultsTitle.textContent =
-      "All products";
-  }
-
-
-  /* EMPTY STATE */
-
-  if (!filtered.length) {
-
-    productsContainer.innerHTML = `
-      <div class="error-message">
-
-        <strong>
-          No products found.
-        </strong>
-
-        <br>
-
-        Try another search or
-        remove your filters.
-
-      </div>
-    `;
-
-    return;
-  }
-
-
-  /* RENDER */
-
-  productsContainer.innerHTML =
-    filtered
-      .map(createProductCard)
-      .join("");
-}
-
-
-/* =========================================
-   CATEGORY FILTERS
-========================================= */
-
-function renderCategoryFilters() {
-
-  categoryFilters.innerHTML =
-    allCategories
-      .map(category => {
-
-        const checked =
-          String(category.id) ===
-          String(currentCategory);
-
-
-        return `
-          <label class="filter-option">
-
-            <input
-              type="radio"
-              name="category"
-              value="${escapeHTML(
-                category.id
-              )}"
-              ${checked ? "checked" : ""}
-            >
-
-            <span>
-              ${escapeHTML(
-                category.name
-              )}
-            </span>
-
-          </label>
-        `;
-
-      })
-      .join("");
-
-
-  categoryFilters
-    .querySelectorAll(
-      'input[name="category"]'
-    )
-    .forEach(input => {
-
-      input.addEventListener(
-        "change",
-        () => {
-
-          currentCategory =
-            input.value;
-
-
-          updateURL();
-
-
-          renderProducts();
-        }
-      );
-    });
-}
-
-
-/* =========================================
-   UPDATE URL
-========================================= */
-
-function updateURL() {
+async function searchProducts() {
 
   const params =
-    new URLSearchParams();
-
-
-  if (currentSearch) {
-
-    params.set(
-      "q",
-      currentSearch
+    new URLSearchParams(
+      window.location.search
     );
-  }
-
-
-  if (currentCategory) {
-
-    params.set(
-      "category",
-      currentCategory
-    );
-  }
 
 
   const query =
-    params.toString();
+    (params.get("q") || "")
+      .trim();
 
 
-  const newURL =
-    query
-      ? `${window.location.pathname}?${query}`
-      : window.location.pathname;
+  /* Put query into search box */
+
+  if (searchInput) {
+
+    searchInput.value =
+      query;
+  }
 
 
-  window.history.replaceState(
-    {},
-    "",
-    newURL
-  );
-}
+  /* Update page heading */
 
+  if (query) {
 
-/* =========================================
-   LOAD DATA
-========================================= */
+    searchTitle.textContent =
+      `Search results for "${query}"`;
 
-async function loadData() {
+    searchDescription.textContent =
+      "Products matching your search.";
+  }
+
 
   try {
 
-    const [
-      products,
-      categories
-    ] = await Promise.all([
-
-      supabaseRequest(
-        "products",
-        "?select=*,brands(name),product_images(image_url,alt_text,sort_order)&order=created_at.desc"
-      ),
-
-      supabaseRequest(
-        "categories",
-        "?select=id,name,slug,description&order=name.asc"
-      )
-
-    ]);
+    const products =
+      await getProducts();
 
 
-    allProducts =
+    let results =
       products;
 
 
-    allCategories =
-      categories;
+    /* Filter by name */
+
+    if (query) {
+
+      const searchTerm =
+        query.toLowerCase();
 
 
-    /* URL SEARCH */
-
-    if (urlSearch) {
-
-      currentSearch =
-        urlSearch;
-
-
-      searchInput.value =
-        urlSearch;
-    }
-
-
-    /* URL CATEGORY */
-
-    if (urlCategory) {
-
-      const categoryExists =
-        categories.some(
-          category =>
-            String(category.id) ===
-            String(urlCategory)
+      results =
+        products.filter(
+          product =>
+            String(
+              product.name || ""
+            )
+              .toLowerCase()
+              .includes(
+                searchTerm
+              )
         );
-
-
-      if (categoryExists) {
-
-        currentCategory =
-          urlCategory;
-      }
     }
 
 
-    renderCategoryFilters();
+    /* No results */
 
-    renderProducts();
+    if (!results.length) {
+
+      searchResults.innerHTML =
+        "";
+
+      noResults.hidden =
+        false;
+
+      return;
+    }
+
+
+    noResults.hidden =
+      true;
+
+
+    searchResults.innerHTML =
+      results
+        .map(
+          product =>
+            createProductCard(
+              product
+            )
+        )
+        .join("");
 
 
   } catch (error) {
 
     console.error(
-      "Search loading error:",
+      "Search error:",
       error
     );
 
 
-    productsContainer.innerHTML = `
-      <div class="error-message">
+    searchResults.innerHTML = `
+      <div class="search-error">
 
-        <strong>
-          Unable to load products.
-        </strong>
+        <h3>
+          Unable to load products
+        </h3>
 
-        <br>
-
-        Please try again later.
+        <p>
+          Please try again later.
+        </p>
 
       </div>
     `;
 
-
-    resultsCount.textContent =
-      "Unable to load";
   }
+
 }
 
 
 /* =========================================
-   SEARCH INPUT
-========================================= */
-
-searchInput.addEventListener(
-  "input",
-  () => {
-
-    currentSearch =
-      searchInput.value.trim();
-
-
-    updateURL();
-
-
-    renderProducts();
-  }
-);
-
-
-/* =========================================
-   CLEAR SEARCH
-========================================= */
-
-clearButton.addEventListener(
-  "click",
-  () => {
-
-    searchInput.value = "";
-
-    currentSearch = "";
-
-    updateURL();
-
-    renderProducts();
-
-    searchInput.focus();
-  }
-);
-
-
-/* =========================================
-   RESET FILTERS
-========================================= */
-
-resetFilters.addEventListener(
-  "click",
-  () => {
-
-    currentSearch = "";
-
-    currentCategory = "";
-
-    searchInput.value = "";
-
-
-    categoryFilters
-      .querySelectorAll(
-        'input[name="category"]'
-      )
-      .forEach(input => {
-
-        input.checked = false;
-      });
-
-
-    updateURL();
-
-    renderProducts();
-  }
-);
-
-
-/* =========================================
-   START
+   INITIALIZE
 ========================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
-  loadData
+  searchProducts
 );
