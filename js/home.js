@@ -1,294 +1,96 @@
-const featuredContainer = document.getElementById("featured-products");
-const trendingContainer = document.getElementById("trending-products");
-const categoriesContainer = document.getElementById("categories");
+/* =========================================================
+   BUYHERE HOMEPAGE
+========================================================= */
 
 
-/* =========================================
-   SUPABASE REQUEST
-========================================= */
+/* =========================================================
+   CONFIG
+========================================================= */
 
-async function supabaseRequest(table, query = "") {
-  const response = await fetch(
-    `${SUPABASE_URL}/rest/v1/${table}${query}`,
-    {
-      method: "GET",
-      headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json"
-      }
-    }
+const HOME_SUPABASE_URL =
+  window.SUPABASE_URL;
+
+const HOME_SUPABASE_ANON_KEY =
+  window.SUPABASE_ANON_KEY;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const productsGrid =
+  document.getElementById(
+    "products-grid"
   );
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `Supabase error ${response.status}: ${errorText}`
-    );
-  }
-
-  return response.json();
-}
+const productsEmpty =
+  document.getElementById(
+    "products-empty"
+  );
 
 
-/* =========================================
-   FORMAT PRICE
-========================================= */
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-function formatPrice(price) {
-  if (price === null || price === undefined) {
-    return "Price unavailable";
-  }
+async function loadHomepageProducts() {
 
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0
-  }).format(price);
-}
+  if (!productsGrid) {
 
-
-/* =========================================
-   ESCAPE HTML
-========================================= */
-
-function escapeHTML(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-
-/* =========================================
-   PRODUCT IMAGE
-========================================= */
-
-function getProductImage(product) {
-  if (
-    product.product_images &&
-    product.product_images.length > 0
-  ) {
-    const images = [...product.product_images];
-
-    images.sort(
-      (a, b) =>
-        (a.sort_order || 0) -
-        (b.sort_order || 0)
+    console.error(
+      "Products grid was not found."
     );
 
-    return images[0].image_url;
+    return;
   }
 
-  return "https://placehold.co/800x800/f4f5f6/777?text=Product";
-}
+
+  const url =
+    `${HOME_SUPABASE_URL}/rest/v1/products` +
+    `?select=id,name,price,slug,product_url,` +
+    `product_images(image_url,alt_text,sort_order)` +
+    `&order=created_at.desc`;
 
 
-/* =========================================
-   PRODUCT CARD
-========================================= */
-
-function createProductCard(product) {
-  const image = getProductImage(product);
-
-  const brand =
-    product.brands?.name || "Product";
-
-  const rating =
-    product.rating !== null &&
-    product.rating !== undefined
-      ? `★ ${product.rating}`
-      : "";
-
-  const reviews =
-    product.review_count
-      ? `(${Number(product.review_count).toLocaleString("en-IN")})`
-      : "";
-
-  return `
-    <a
-      href="product.html?slug=${encodeURIComponent(product.slug)}"
-      class="product-card"
-    >
-
-      <div class="product-image">
-
-        ${
-          product.featured
-            ? `<span class="product-badge">FEATURED</span>`
-            : ""
-        }
-
-        <img
-          src="${escapeHTML(image)}"
-          alt="${escapeHTML(product.name)}"
-          loading="lazy"
-        >
-
-      </div>
-
-
-      <div class="product-content">
-
-        <div class="product-brand">
-          ${escapeHTML(brand)}
-        </div>
-
-        <h3 class="product-name">
-          ${escapeHTML(product.name)}
-        </h3>
-
-        <p class="product-description">
-          ${escapeHTML(product.description || "")}
-        </p>
-
-
-        <div class="product-bottom">
-
-          <strong class="product-price">
-            ${formatPrice(product.price)}
-          </strong>
-
-          ${
-            rating
-              ? `
-                <span class="product-rating">
-                  ${rating}
-                  ${
-                    reviews
-                      ? `<span>${reviews}</span>`
-                      : ""
-                  }
-                </span>
-              `
-              : ""
-          }
-
-        </div>
-
-      </div>
-
-    </a>
-  `;
-}
-
-
-/* =========================================
-   CATEGORY CARD
-========================================= */
-
-function createCategoryCard(category, index) {
-  const number =
-    String(index + 1).padStart(2, "0");
-
-  return `
-    <a
-      href="category.html?slug=${encodeURIComponent(category.slug)}"
-      class="category-card"
-    >
-
-      <span class="category-number">
-        ${number}
-      </span>
-
-      <strong class="category-name">
-        ${escapeHTML(category.name)}
-      </strong>
-
-      ${
-        category.description
-          ? `
-            <span class="category-description">
-              ${escapeHTML(category.description)}
-            </span>
-          `
-          : ""
-      }
-
-    </a>
-  `;
-}
-
-
-/* =========================================
-   LOAD PRODUCTS
-========================================= */
-
-async function loadProducts() {
   try {
 
-    const products = await supabaseRequest(
-      "products",
-      "?select=*,brands(name),product_images(image_url,alt_text,sort_order)&order=created_at.desc"
-    );
+    const response =
+      await fetch(
+        url,
+        {
+          method: "GET",
 
+          headers: {
 
-    /* -----------------------------
-       Featured products
-    ----------------------------- */
+            apikey:
+              HOME_SUPABASE_ANON_KEY,
 
-    const featuredProducts =
-      products.filter(
-        product => product.featured === true
+            Authorization:
+              `Bearer ${HOME_SUPABASE_ANON_KEY}`
+          }
+        }
       );
 
 
-    /* -----------------------------
-       Trending products
-       For now we use the latest
-       products until we build
-       proper collection queries.
-    ----------------------------- */
+    if (!response.ok) {
 
-    const trendingProducts =
-      products.slice(0, 3);
+      const error =
+        await response.text();
 
-
-    /* -----------------------------
-       Render Featured
-    ----------------------------- */
-
-    if (featuredProducts.length > 0) {
-
-      featuredContainer.innerHTML =
-        featuredProducts
-          .slice(0, 6)
-          .map(createProductCard)
-          .join("");
-
-    } else {
-
-      featuredContainer.innerHTML = `
-        <div class="error-message">
-          No featured products available yet.
-        </div>
-      `;
-
+      throw new Error(
+        `Supabase error ${response.status}: ${error}`
+      );
     }
 
 
-    /* -----------------------------
-       Render Trending
-    ----------------------------- */
+    const products =
+      await response.json();
 
-    if (trendingProducts.length > 0) {
 
-      trendingContainer.innerHTML =
-        trendingProducts
-          .map(createProductCard)
-          .join("");
+    displayProducts(
+      products
+    );
 
-    } else {
-
-      trendingContainer.innerHTML = `
-        <div class="error-message">
-          No products available yet.
-        </div>
-      `;
-
-    }
 
   } catch (error) {
 
@@ -297,106 +99,263 @@ async function loadProducts() {
       error
     );
 
-    featuredContainer.innerHTML = `
-      <div class="error-message">
-        <strong>Unable to load products.</strong>
-        <br>
-        Please try again later.
-      </div>
-    `;
 
-    trendingContainer.innerHTML = `
-      <div class="error-message">
-        <strong>Unable to load products.</strong>
-        <br>
+    productsGrid.innerHTML = `
+      <div class="product-loading">
+
+        Unable to load products.
+
+        <br><br>
+
         Please try again later.
+
       </div>
     `;
   }
+
 }
 
 
-/* =========================================
-   LOAD CATEGORIES
-========================================= */
+/* =========================================================
+   DISPLAY PRODUCTS
+========================================================= */
 
-async function loadCategories() {
-  try {
+function displayProducts(
+  products
+) {
 
-    const categories =
-      await supabaseRequest(
-        "categories",
-        "?select=id,name,slug,description&order=name.asc"
-      );
+  if (!products || !products.length) {
+
+    productsGrid.innerHTML =
+      "";
 
 
-    if (!categories.length) {
+    if (productsEmpty) {
 
-      categoriesContainer.innerHTML = `
-        <div class="error-message">
-          No categories available yet.
-        </div>
-      `;
-
-      return;
+      productsEmpty.hidden =
+        false;
     }
 
-
-    categoriesContainer.innerHTML =
-      categories
-        .slice(0, 8)
-        .map(createCategoryCard)
-        .join("");
-
-  } catch (error) {
-
-    console.error(
-      "Category loading error:",
-      error
-    );
-
-    categoriesContainer.innerHTML = `
-      <div class="error-message">
-        <strong>Unable to load categories.</strong>
-        <br>
-        Please try again later.
-      </div>
-    `;
-  }
-}
-
-
-/* =========================================
-   INITIALIZE HOME PAGE
-========================================= */
-
-async function initializeHomePage() {
-
-  if (
-    !featuredContainer ||
-    !trendingContainer ||
-    !categoriesContainer
-  ) {
-    console.error(
-      "Required homepage containers were not found."
-    );
 
     return;
   }
 
 
-  await Promise.all([
-    loadProducts(),
-    loadCategories()
-  ]);
+  if (productsEmpty) {
+
+    productsEmpty.hidden =
+      true;
+  }
+
+
+  productsGrid.innerHTML =
+    products
+      .map(
+        product =>
+          createProductCard(
+            product
+          )
+      )
+      .join("");
 }
 
 
-/* =========================================
+/* =========================================================
+   PRODUCT CARD
+========================================================= */
+
+function createProductCard(
+  product
+) {
+
+  const image =
+    getProductImage(
+      product
+    );
+
+
+  const productPage =
+    product.slug
+      ? `product.html?slug=${encodeURIComponent(
+          product.slug
+        )}`
+      : `product.html?id=${encodeURIComponent(
+          product.id
+        )}`;
+
+
+  return `
+    <article class="product-card">
+
+      <a
+        href="${productPage}"
+        class="product-image-link"
+      >
+
+        <div class="product-image-wrapper">
+
+          <img
+            src="${escapeHTML(
+              image
+            )}"
+            alt="${escapeHTML(
+              product.name
+            )}"
+            class="product-image"
+            loading="lazy"
+          >
+
+        </div>
+
+      </a>
+
+
+      <div class="product-card-content">
+
+        <h3 class="product-name">
+
+          <a
+            href="${productPage}"
+          >
+            ${escapeHTML(
+              product.name
+            )}
+          </a>
+
+        </h3>
+
+
+        <div class="product-card-bottom">
+
+          <span class="product-price">
+            ${formatPrice(
+              product.price
+            )}
+          </span>
+
+
+          ${
+            product.product_url
+              ? `
+                <a
+                  href="${escapeHTML(
+                    product.product_url
+                  )}"
+                  class="product-checkout"
+                  target="_blank"
+                  rel="nofollow sponsored noopener"
+                >
+                  Check out
+                </a>
+              `
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+    </article>
+  `;
+}
+
+
+/* =========================================================
+   GET IMAGE
+========================================================= */
+
+function getProductImage(
+  product
+) {
+
+  const images =
+    product.product_images ||
+    [];
+
+
+  if (!images.length) {
+
+    return "https://placehold.co/600x600/f5f5f5/777?text=Product";
+  }
+
+
+  const sortedImages =
+    [...images].sort(
+      (a, b) =>
+        (a.sort_order || 0) -
+        (b.sort_order || 0)
+    );
+
+
+  return (
+    sortedImages[0].image_url ||
+    "https://placehold.co/600x600/f5f5f5/777?text=Product"
+  );
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+function formatPrice(
+  price
+) {
+
+  return new Intl.NumberFormat(
+    "en-IN",
+    {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0
+    }
+  ).format(price);
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+}
+
+
+/* =========================================================
    START
-========================================= */
+========================================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
-  initializeHomePage
+  () => {
+
+    loadHomepageProducts();
+
+  }
 );
